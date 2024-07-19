@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      img {
+        width: 300px;
+        height: 500px;
+        display: block;
+        margin: 0 auto;
+        object-fit: contain;
+      }
+    </style>
+    <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/lodash.js/4.17.20/lodash.min.js"></script>
+  </head>
+  <body>
+    <img alt="" data-src="images/1 (1).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (2).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (3).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (4).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (5).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (6).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (7).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (8).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (9).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (10).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (11).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (12).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (13).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (14).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (15).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (16).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (17).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (18).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (19).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (20).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (21).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (22).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (23).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (24).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (25).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (26).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (27).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (28).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (29).jpeg" loading="lazy" />
+    <img alt="" data-src="images/1 (30).jpeg" loading="lazy" />
+    <script>
+      // getBoundingClientRect
+      let images = [...document.querySelectorAll('[data-src]')]
+      function lazyload() {
+        const visited = []
+        for (let i = 0; i < images.length; i++) {
+          const top = images[i].getBoundingClientRect().top
+          if (top <= window.innerHeight) {
+            images[i].src = images[i].dataset.src
+            visited.push(i)
+          }
+        }
+        images = images.filter((_, index) => {
+          return !visited.includes(index)
+        })
+        if (images.length === 0) {
+          window.removeEventListener('scroll', throttled)
+        }
+      }
+
+      const throttled = _.throttle(lazyload, 500, { trailing: false })
+      window.onload = lazyload
+      window.addEventListener('scroll', throttled)
+
+      // IntersectionObserver
+      /* const observer = new IntersectionObserver(function (entries, self) {
+        entries.forEach(({intersectionRatio, target}) => {
+          if (intersectionRatio > 0) {
+            target.src = target.dataset.src
+            self.unobserve(target)
+          }
+        })
+      })
+
+      const imgs = document.querySelectorAll('[data-src]')
+      imgs.forEach(img => {
+        observer.observe(img)
+      }) */
+    </script>
+  </body>
+</html>

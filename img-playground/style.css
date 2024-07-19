@@ -1,0 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+img {
+  width: 300px;
+  height: auto;
+  object-fit: cover;
+}
+
+iframe {
+  border: none;
+  width: 100%;
+  height: 90vh;
+}

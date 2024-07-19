@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="font-size: 0">
+    <div>
+      <button onclick="createCanvas()">创建canvas</button>
+      <button onclick="generateImg()">生成图片</button>
+    </div>
+    <input type="file" accept="image/*" id="inp" />
+    <img alt="" id="img" />
+    <script>
+      const input = document.querySelector("#inp");
+
+      input.addEventListener("change", function (e) {
+        img.src = URL.createObjectURL(e.target.files[0]);
+      });
+      function createCanvas() {
+        const img = document.getElementById("img");
+        if (!img.src) {
+          return;
+        }
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // 节流鼠标移动事件
+        const throttled = throttle(mosaic, 1000 / 60);
+        canvas.onmousedown = () => {
+          // 绑定鼠标移动事件
+          canvas.addEventListener("mousemove", throttled);
+        };
+        canvas.onmouseup = canvas.onmouseout = () => {
+          canvas.removeEventListener("mousemove", throttled);
+        };
+        ctx.drawImage(img, 0, 0);
+        document.body.appendChild(canvas);
+      }
+
+      function generateImg() {
+        const canvas = document.querySelector("canvas");
+        if (!canvas) return;
+        const dataURL = canvas.toDataURL("image/webp");
+        const img = new Image();
+        img.src = dataURL;
+        document.body.appendChild(img);
+      }
+
+      function mosaic(event) {
+        const x = event.offsetX;
+        const y = event.offsetY;
+        const canvas = event.currentTarget;
+        // 马赛克程度
+        const level = 10;
+        const img = document.getElementById("img");
+        const ctx = canvas.getContext("2d");
+        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+        // 获取鼠标所在位置的像素信息
+        const pixel = getPixel(imageData, x, y);
+
+        for (let i = 0; i < level; i++) {
+          for (let j = 0; j < level; j++) {
+            setPixel(imageData, x + i, y + j, pixel);
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+      }
+
+      function getPixel(imageData, x, y) {
+        const { data, width } = imageData;
+        const i = (y * width + x) * 4;
+        return {
+          r: data[i],
+          g: data[i + 1],
+          b: data[i + 2],
+        };
+      }
+
+      function setPixel(imageData, x, y, pixel) {
+        const { data, width } = imageData;
+        const { r, g, b } = pixel;
+        const i = (y * width + x) * 4;
+        data[i] = r;
+        data[i + 1] = g;
+        data[i + 2] = b;
+      }
+
+      function throttle(fn, delay = 1000) {
+        let start = 0;
+        return function () {
+          let end = Date.now();
+          if (end - start >= delay) {
+            fn.apply(this, arguments);
+            start = end;
+          }
+        };
+      }
+    </script>
+  </body>
+</html>

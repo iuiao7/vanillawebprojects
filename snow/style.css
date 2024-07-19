@@ -1,0 +1,14 @@
+body {
+  background-color: #aed9e7;
+  perspective: 500px;
+  -webkit-perspective: 500;
+  overflow: hidden;
+}
+
+.snow {
+  display: block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-image: radial-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 60%);
+}
